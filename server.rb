@@ -1,26 +1,33 @@
-
 require 'sinatra'
+require './client'
 
-clients = [{first_name: "John", last_name: "Doe", balance: 0}]
+clients = [{ first_name: "John", last_name: "Doe", balance: 0 }]
+
+new_client = Factory.new_client(
+  :first_name => "Tom",
+  :last_name => "Jerry",
+  :balance   => 99
+).push(clients)
+
 
 def get_body(request)
-  return JSON.parse(request.body.read)
+  JSON.parse(request.body.read)
 end
 
 get '/clients' do
-  return clients.to_json
+  clients.to_json
 end
 
 get '/clients/:id' do
   id = params["id"].to_i
-  return clients[id].to_json
+  clients[id].to_json
 end
 
 post '/clients' do
   body = get_body(request)
-  new_client = {first_name: body["first_name"], last_name: body["last_name"], balance: body["balance"]}
+  new_client = { first_name: body["first_name"], last_name: body["last_name"], balance: body["balance"] }
   clients.push(new_client)
-  return new_client.to_json
+  new_client.to_json
 end
 
 put '/clients/:id' do
@@ -29,11 +36,11 @@ put '/clients/:id' do
   clients[id][:first_name] = body["first_name"]
   clients[id][:last_name] = body["last_name"]
   clients[id][:balance] = body["balance"]
-  return clients[id].to_json
+  clients[id].to_json
 end
 
 delete '/clients/:id' do
   id = params["id"].to_i
   client = clients.delete_at(id)
-  return client.to_json
+  client.to_json
 end
