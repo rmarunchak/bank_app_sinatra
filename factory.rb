@@ -6,10 +6,10 @@ module Factory
   def self.create_client(args)
     DataModels::Client.new(args[:first_name],
                            args[:last_name],
-                           args[:balance])
+                           args[:balance]).generate_json
   end
 
   def self.create_atm(args)
-    DataModels::Atm.new(args[:available_cash])
+    DataModels::Atm.new(args[:available_cash]).generate_json
   end
 end

@@ -7,8 +7,8 @@ module DataModels
       @balance   = balance
     end
 
-    def to_json
-      {first_name: @first_name, last_name: @last_name, balance: @balance}.to_json
+    def generate_json
+      { first_name: @first_name, last_name: @last_name, balance: @balance }.to_json
     end
   end
 end

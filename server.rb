@@ -39,12 +39,6 @@ put '/clients/:id' do
   clients[id].to_json
 end
 
-delete '/clients/:id' do
-  id = params['id'].to_i
-  client = clients.delete_at(id)
-  client.to_json
-end
-
 get '/atm' do
   atm.to_json
 end

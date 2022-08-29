@@ -17,3 +17,4 @@ def new_atm
   Factory.create_atm(available_cash: Faker::Number.number(digits: 5))
 end
 
+

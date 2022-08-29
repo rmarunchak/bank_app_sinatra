@@ -8,7 +8,7 @@ module DataModels
       @available_cash = available_cash
     end
 
-    def to_json(*_args)
+    def generate_json
       { available_cash: @available_cash }.to_json
     end
   end
