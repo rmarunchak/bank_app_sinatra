@@ -5,7 +5,7 @@ require_relative 'helpers/relatives'
 require_relative 'helpers/helpers'
 
 
-clients = []
+clients = File.read('./client_base.json')
 atm = []
 
 get '/clients' do
@@ -14,7 +14,7 @@ end
 
 get '/generate_client' do
   @new_client = new_client.to_json
-  clients.push(@new_client)
+  File.open('./client_base.json', 'a') { |file| file.write(@new_client) }
   clients.to_json
 end
 
