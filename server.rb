@@ -4,29 +4,36 @@ require 'faker'
 require_relative 'helpers/relatives'
 require_relative 'helpers/helpers'
 
-
 clients = File.read('./client_base.json')
 atm = []
 
 get '/clients' do
-  clients.to_json
+  content_type :json
+  clients
 end
 
 get '/generate_client' do
-  @new_client = new_client.to_json
-  File.open('./client_base.json', 'a') { |file| file.write(@new_client) }
-  clients.to_json
+  array = []
+  @new_client = new_client
+  if File.zero?('./client_base.json')
+    File.open('./client_base.json', 'a') { |file| file.write((JSON(array.push(JSON(@new_client))))) }
+  else
+    file_array = File.readlines('./client_base.json')
+    File.write('./client_base.json', JSON(file_array.push(JSON(@new_client))))
+  end
 end
 
 get '/clients/:id' do
+  content_type :json
   id = params['id'].to_i
-  clients[id].to_json
+  clients[id]
 end
 
 post '/clients' do
+  content_type :json
   body = get_body(request)
   new_client = { first_name: body['first_name'], last_name: body['last_name'], balance: body['balance'] }
-  clients.push(new_client)
+  File.open('./client_base.json', 'a') { |file| file.write(new_client.to_json) }
   new_client.to_json
 end
 
