@@ -14,7 +14,6 @@ get '/clients' do
 end
 
 get '/generate_client' do
-  array = []
   @new_client = JSON(new_client)
   if File.zero?('./client_base.json')
     file = File.open('./client_base.json', 'w+')
@@ -31,9 +30,11 @@ get '/generate_client' do
 end
 
 get '/clients/:id' do
-  file = File.open('./client_base.json', 'w+')
-  id = params[id].to_i
-  file[id.to_s]
+  content_type :json
+  file = File.open('./client_base.json', 'r+')
+  users = JSON(file.read)
+  id = params['id'].to_i
+  JSON(users[id])
 end
 
 post '/clients' do
