@@ -18,15 +18,14 @@ get '/generate_client' do
   if File.zero?('./client_base.json')
     file = File.open('./client_base.json', 'w+')
     file.write(JSON([@new_client]))
-    file.close
   else
     file = File.open('./client_base.json', 'r+')
     users = JSON(file.read)
     users << @new_client
     file = File.open('./client_base.json', 'w+')
     file.write(JSON(users))
-    file.close
   end
+  file.close
 end
 
 get '/clients/:id' do
@@ -41,8 +40,12 @@ post '/clients' do
   content_type :json
   body = get_body(request)
   new_client = { first_name: body['first_name'], last_name: body['last_name'], balance: body['balance'] }
-  File.open('./client_base.json', 'a') { |file| file.write(new_client.to_json) }
-  new_client.to_json
+  file = File.open('./client_base.json', 'r+')
+  users = JSON(file.read)
+  users << JSON(new_client.to_json)
+  file = File.open('./client_base.json', 'w+')
+  file.write(JSON(users))
+  file.close
 end
 
 put '/clients/:id' do
