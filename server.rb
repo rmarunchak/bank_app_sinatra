@@ -3,6 +3,7 @@ require 'json'
 require 'faker'
 require_relative 'helpers/relatives'
 require_relative 'helpers/helpers'
+require 'pry'
 
 clients = File.read('./client_base.json')
 atm = []
@@ -14,19 +15,25 @@ end
 
 get '/generate_client' do
   array = []
-  @new_client = new_client
+  @new_client = JSON(new_client)
   if File.zero?('./client_base.json')
-    File.open('./client_base.json', 'a') { |file| file.write((JSON(array.push(JSON(@new_client))))) }
+    file = File.open('./client_base.json', 'w+')
+    file.write(JSON([@new_client]))
+    file.close
   else
-    file_array = File.readlines('./client_base.json')
-    File.write('./client_base.json', JSON(file_array.push(JSON(@new_client))))
+    file = File.open('./client_base.json', 'r+')
+    users = JSON(file.read)
+    users << @new_client
+    file = File.open('./client_base.json', 'w+')
+    file.write(JSON(users))
+    file.close
   end
 end
 
 get '/clients/:id' do
-  content_type :json
-  id = params['id'].to_i
-  clients[id]
+  file = File.open('./client_base.json', 'w+')
+  id = params[id].to_i
+  file[id.to_s]
 end
 
 post '/clients' do
