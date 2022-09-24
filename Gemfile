@@ -1,5 +1,6 @@
-gem 'sinatra'
 gem 'faker'
+gem 'sinatra'
 gem 'pry'
 gem 'pry-byebug'
+gem 'rspec'
 gem 'rubocop'

@@ -50,11 +50,15 @@ end
 
 put '/clients/:id' do
   id = params['id'].to_i
+  content_type :json
   body = get_body(request)
-  clients[id][:first_name] = body['first_name']
-  clients[id][:last_name] = body['last_name']
-  clients[id][:balance] = body['balance']
-  clients[id].to_json
+  new_client = { first_name: body['first_name'], last_name: body['last_name'], balance: body['balance'] }
+  file = File.open('./client_base.json', 'r+')
+  users = JSON(file.read)
+  JSON(users[id]) << JSON(new_client.to_json)
+  file = File.open('./client_base.json', 'w+')
+  file.write(JSON(users[id]))
+  file.close
 end
 
 get '/atm' do
