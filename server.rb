@@ -55,9 +55,10 @@ put '/clients/:id' do
   new_client = { first_name: body['first_name'], last_name: body['last_name'], balance: body['balance'] }
   file = File.open('./client_base.json', 'r+')
   users = JSON(file.read)
-  JSON(users[id]) << JSON(new_client.to_json)
+  updated_user = (users[id]).replace(JSON(new_client.to_json))
+  users << updated_user
   file = File.open('./client_base.json', 'w+')
-  file.write(JSON(users[id]))
+  file.write(JSON(users))
   file.close
 end
 
@@ -70,5 +71,16 @@ get '/generate_atm' do
   atm.push(@new_atm)
   atm.to_json
 end
+
+put '/withdraw/:id/:amount' do
+  id = params['id'].to_i
+  amount = params['amount'].to_i
+  file = File.open('./client_base.json', 'r+')
+  users = JSON(file.read)
+  id = params['id'].to_i
+  JSON(users[id])
+
+end
+
 
 
