@@ -39,7 +39,7 @@ end
 post '/clients' do
   content_type :json
   body = get_body(request)
-  new_client = { first_name: body['first_name'], last_name: body['last_name'], balance: body['balance'] }
+  new_client =  { first_name: body['first_name'], last_name: body['last_name'], balance: body['balance'] }
   file = File.open('./client_base.json', 'r+')
   users = JSON(file.read)
   users << JSON(new_client.to_json)
@@ -55,8 +55,7 @@ put '/clients/:id' do
   new_client = { first_name: body['first_name'], last_name: body['last_name'], balance: body['balance'] }
   file = File.open('./client_base.json', 'r+')
   users = JSON(file.read)
-  updated_user = (users[id]).replace(JSON(new_client.to_json))
-  users << updated_user
+  (users[id]).replace(JSON(new_client.to_json))
   file = File.open('./client_base.json', 'w+')
   file.write(JSON(users))
   file.close
@@ -72,15 +71,24 @@ get '/generate_atm' do
   atm.to_json
 end
 
-put '/withdraw/:id/:amount' do
-  id = params['id'].to_i
-  amount = params['amount'].to_i
-  file = File.open('./client_base.json', 'r+')
-  users = JSON(file.read)
-  id = params['id'].to_i
-  JSON(users[id])
+get '/select_withdraw_user/:id' do |user|
+  @user = user
+end
+
+get '/select_withdraw_amount/:amount' do |amount|
+  @amount = amount
+  puts amount
+end
+
+put '/withdraw' do
+  id = @user
+
 
 end
+
+
+
+
 
 
 
