@@ -71,19 +71,25 @@ get '/generate_atm' do
   atm.to_json
 end
 
-get '/select_withdraw_user/:id' do |user|
+get '/set_withdraw_user/:id' do |user|
   @user = user
 end
 
-get '/select_withdraw_amount/:amount' do |amount|
+get '/set_withdraw_amount/:amount' do |amount|
   @amount = amount
-  puts amount
 end
 
-put '/withdraw' do
-  id = @user
-
-
+get '/withdraw' do
+  content_type :json
+  file = File.open('./client_base.json', 'r+')
+  users = JSON(file.read)
+  id = params["#{@user}"].to_i
+  old_balance = users[id]['balance']
+  new_balance = old_balance - @amount
+  (users[id]).replace(JSON(new_balance.to_json))
+  file = File.open('./client_base.json', 'w+')
+  file.write(JSON(users))
+  file.close
 end
 
 
